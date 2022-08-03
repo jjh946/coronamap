@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { sequelize } = require('./database');
+const globalStatController = require('./controller/global-stat.controller');
 
 async function launchServer(){
     const app = express();  //익스프레스 인스턴스 생성
@@ -10,6 +11,10 @@ async function launchServer(){
     app.get('/', (req, res) => {
     res.json({ message: 'Hello CoronaBoard!\n 이상으로 단 십여줄의 코드만으로 api서버를 실행시켰습니다' });
     });
+
+    app.get('/global-stats', globalStatController.getAll);
+    app.post('/global-stats', globalStatController.insertOrUpdate);
+    app.delete('/global-stats', globalStatController.remove);
 
     try {
         await sequelize.sync();
